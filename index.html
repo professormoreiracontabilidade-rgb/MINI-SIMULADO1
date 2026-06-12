@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>Simulado FGV - Contabilidade Básica | Professor Moreira</title>
+<style>
+:root{
+  --azul:#071f49;
+  --azul2:#0b3b7a;
+  --laranja:#ff8a00;
+  --verde:#0a8f50;
+  --vermelho:#c62828;
+  --cinza:#f3f6fb;
+  --texto:#172033;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  background:linear-gradient(180deg,#071f49 0%,#0b3b7a 45%,#f3f6fb 45%);
+  color:var(--texto);
+}
+.app{
+  width:100%;
+  max-width:520px;
+  margin:0 auto;
+  min-height:100vh;
+  background:#fff;
+  box-shadow:0 0 20px rgba(0,0,0,.18);
+  position:relative;
+  overflow:hidden;
+}
+.header{
+  background:var(--azul);
+  color:#fff;
+  padding:18px 18px 14px;
+  text-align:center;
+}
+.header h1{
+  font-size:21px;
+  margin:0 0 5px;
+  line-height:1.2;
+}
+.header p{margin:0;font-size:13px;opacity:.9}
+.screen{display:none;padding:18px 16px 92px}
+.screen.active{display:block}
+.card{
+  background:#fff;
+  border-radius:18px;
+  box-shadow:0 8px 24px rgba(0,0,0,.12);
+  border:1px solid #e8edf5;
+  padding:18px;
+}
+.logo{
+  text-align:center;
+  font-weight:800;
+  color:var(--azul);
+  font-size:20px;
+  margin-bottom:8px;
+}
+.badge{
+  display:inline-block;
+  background:#fff3e0;
+  color:#9a4b00;
+  border:1px solid #ffd8a8;
+  border-radius:999px;
+  padding:6px 11px;
+  font-size:12px;
+  font-weight:700;
+  margin:8px 0;
+}
+label{
+  display:block;
+  font-weight:700;
+  font-size:14px;
+  margin:15px 0 6px;
+}
+input{
+  width:100%;
+  border:2px solid #d6ddea;
+  border-radius:12px;
+  padding:14px;
+  font-size:16px;
+  outline:none;
+}
+input:focus{border-color:var(--azul2)}
+button,.btn{
+  width:100%;
+  border:0;
+  border-radius:14px;
+  padding:15px 14px;
+  font-size:16px;
+  font-weight:800;
+  cursor:pointer;
+  text-decoration:none;
+  display:block;
+  text-align:center;
+}
+.btn-whats{background:#16a34a;color:#fff;margin-top:14px}
+.btn-main{background:var(--azul);color:#fff;margin-top:14px}
+.btn-light{background:#eaf0fb;color:var(--azul);margin-top:10px}
+.btn-danger{background:#fee2e2;color:#991b1b;margin-top:10px}
+.msg{
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:12px;
+  font-size:13px;
+  display:none;
+}
+.msg.err{background:#fee2e2;color:#991b1b;display:block}
+.msg.ok{background:#dcfce7;color:#166534;display:block}
+.notice{
+  background:#eef6ff;
+  border-left:5px solid var(--azul2);
+  padding:12px;
+  border-radius:12px;
+  font-size:14px;
+  line-height:1.45;
+  margin:12px 0;
+}
+.topbar{
+  position:sticky;
+  top:0;
+  background:#fff;
+  z-index:5;
+  border-bottom:1px solid #e8edf5;
+  padding:10px 0 12px;
+}
+.progressText{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:13px;
+  font-weight:700;
+  color:#4b5563;
+  margin-bottom:8px;
+}
+.progress{
+  width:100%;
+  height:10px;
+  background:#e5e7eb;
+  border-radius:999px;
+  overflow:hidden;
+}
+.progress span{
+  display:block;
+  height:100%;
+  width:0%;
+  background:var(--laranja);
+  transition:.25s;
+}
+.questionBox{
+  margin-top:14px;
+  padding:16px;
+  border-radius:18px;
+  background:#f8fafc;
+  border:1px solid #e5e7eb;
+}
+.qtitle{
+  font-size:14px;
+  font-weight:800;
+  color:var(--azul);
+  margin-bottom:10px;
+}
+.qtext{
+  font-size:17px;
+  line-height:1.42;
+  font-weight:700;
+  margin-bottom:14px;
+}
+.option{
+  border:2px solid #dbe3ef;
+  border-radius:14px;
+  padding:13px 12px;
+  margin:10px 0;
+  background:#fff;
+  font-size:15px;
+  line-height:1.32;
+}
+.option.selected{
+  border-color:var(--azul2);
+  background:#eaf2ff;
+  box-shadow:0 0 0 2px rgba(11,59,122,.08);
+}
+.navBottom{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  background:#fff;
+  border-top:1px solid #e5e7eb;
+  padding:10px 14px 14px;
+  display:none;
+  gap:10px;
+}
+.navBottom.active{display:flex}
+.navBottom button{margin:0;padding:14px 10px}
+.smallBtn{font-size:14px}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:8px;
+  margin-top:14px;
+}
+.grid button{
+  padding:10px 0;
+  border-radius:10px;
+  background:#e5e7eb;
+  color:#111827;
+  font-size:13px;
+}
+.grid button.done{background:#bfdbfe;color:#0b3b7a}
+.grid button.current{background:var(--laranja);color:#fff}
+.hidden{display:none!important}
+.finalIcon{
+  font-size:42px;
+  text-align:center;
+  margin:8px 0;
+}
+.finalTitle{
+  text-align:center;
+  color:var(--azul);
+  font-size:22px;
+  font-weight:900;
+}
+.finalSub{
+  text-align:center;
+  line-height:1.45;
+  font-size:15px;
+  color:#4b5563;
+}
+.warning{
+  background:#fff7ed;
+  border:1px solid #fed7aa;
+  color:#9a3412;
+  border-radius:12px;
+  padding:12px;
+  font-size:14px;
+  margin-top:12px;
+}
+@media (max-width:380px){
+  .qtext{font-size:16px}
+  .option{font-size:14px}
+  .header h1{font-size:19px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <h1>Simulado FGV<br>Contabilidade Básica</h1>
+    <p>Curso de Contabilidade Professor Moreira</p>
+  </div>
+
+  <section id="login" class="screen active">
+    <div class="card">
+      <div class="logo">Professor Moreira</div>
+      <div class="badge">Acesso controlado</div>
+      <div class="notice">
+        Para iniciar, informe seu nome, envie a mensagem para o WhatsApp do professor e digite a senha recebida.
+      </div>
+
+      <label for="studentName">Nome completo obrigatório</label>
+      <input id="studentName" type="text" placeholder="Digite seu nome completo">
+
+      <a id="startWhats" class="btn btn-whats" href="#" target="_blank" rel="noopener">1) Enviar nome para o WhatsApp</a>
+
+      <div id="passwordArea" class="hidden">
+        <label for="password">Senha enviada pelo professor</label>
+        <input id="password" type="password" placeholder="Digite a senha">
+        <button class="btn-main" onclick="startQuiz()">2) Iniciar simulado</button>
+      </div>
+
+      <div id="loginMsg" class="msg"></div>
+
+      <div class="warning">
+        Durante o simulado o aluno não verá gabarito, nota, percentual nem quantidade de acertos.
+      </div>
+    </div>
+  </section>
+
+  <section id="quiz" class="screen">
+    <div class="topbar">
+      <div class="progressText">
+        <span id="qCounter">Questão 1/60</span>
+        <span id="timer">00:00</span>
+      </div>
+      <div class="progress"><span id="progressBar"></span></div>
+    </div>
+
+    <div class="questionBox">
+      <div class="qtitle" id="qBank"></div>
+      <div class="qtext" id="qText"></div>
+      <div id="options"></div>
+    </div>
+
+    <div class="grid" id="qGrid"></div>
+  </section>
+
+  <section id="final" class="screen">
+    <div class="card">
+      <div class="finalIcon">✅</div>
+      <div class="finalTitle">Simulado finalizado</div>
+      <p class="finalSub">
+        Suas respostas foram registradas. Agora envie o relatório final para o WhatsApp do professor.
+      </p>
+      <div class="notice">
+        O relatório enviado ao professor contém: nome, tempo gasto, todas as respostas, quantidade de acertos e ranking local. Essas informações não aparecem para o aluno.
+      </div>
+      <a id="finalWhats" class="btn btn-whats" href="#" target="_blank" rel="noopener">Enviar respostas para o WhatsApp</a>
+      <button class="btn-light" onclick="restartAll()">Reiniciar simulado</button>
+    </div>
+  </section>
+
+  <div id="nav" class="navBottom">
+    <button class="btn-light smallBtn" onclick="prevQuestion()">◀ Voltar</button>
+    <button class="btn-main smallBtn" onclick="nextQuestion()">Avançar ▶</button>
+  </div>
+</div>
+
+<script>
+const PROFESSOR_WHATSAPP = "5561985323574";
+const SENHA_SIMULADO = "MOREIRA2026"; // altere aqui a senha do simulado
+
+const questions = [
+{q:"O objeto da contabilidade é o patrimônio das entidades. O patrimônio é definido como o conjunto de:",a:["bens e direitos, apenas.","receitas e despesas de um período econômico.","bens, direitos e obrigações vinculados a uma entidade.","ativos financeiros e passivos exigíveis.","recursos investidos exclusivamente pelos proprietários."],g:"C"},
+{q:"A equação fundamental da contabilidade demonstra a relação de equilíbrio entre os elementos que compõem o Balanço Patrimonial. Se uma entidade apresenta um Ativo total superior ao Passivo Exigível, a diferença positiva representa:",a:["o Passivo a Descoberto.","as Despesas Antecipadas.","o Capital de Terceiros.","o Patrimônio Líquido.","o Resultado Líquido do Exercício."],g:"D"},
+{q:"De acordo com as regras de funcionamento das contas patrimoniais, o mecanismo de débito e crédito determina que:",a:["as contas de Ativo aumentam por crédito e diminuem por débito.","as contas de Passivo aumentam por débito e diminuem por crédito.","as contas de Patrimônio Líquido aumentam por crédito e diminuem por débito.","as contas de Despesa aumentam por crédito e diminuem por débito.","as contas de Receita aumentam por débito e diminuem por crédito."],g:"C"},
+{q:"Determinada empresa comercial adquiriu mercadorias para estoque com pagamento integral realizado à vista no ato da compra. De acordo com a classificação dos fatos contábeis, essa transação configura um fato:",a:["permutativo, pois altera apenas a composição do ativo, sem modificar o patrimônio líquido.","modificativo diminutivo, devido à saída de recursos do caixa.","modificativo aumentativo, em função da entrada de novos bens no estoque.","misto diminutivo, por envolver simultaneamente uma permuta e uma despesa.","misto aumentativo, por agregar valor ao ativo circulante."],g:"A"},
+{q:"O princípio contábil que pressupõe que a entidade continuará em marcha por tempo indeterminado no futuro, servindo de base para a mensuração e classificação de ativos e passivos em circulante e não circulante, denomina-se princípio da:",a:["Competência.","Oportunidade.","Prudência.","Continuidade.","Entidade."],g:"D"},
+{q:"Uma empresa prestou serviços de consultoria em dezembro de 2025, emitindo a respectiva nota fiscal no mesmo mês. O contrato prevê que o cliente efetuará o pagamento integral em fevereiro de 2026. Seguindo estritamente o Regime de Competência, a empresa deve reconhecer a receita de serviços em:",a:["dezembro de 2025, momento em que o serviço foi efetivamente prestado (fato gerador).","fevereiro de 2026, momento em que ocorrerá o recebimento financeiro.","parceladamente entre dezembro de 2025 e fevereiro de 2026.","janeiro de 2026, como um período de transição entre a prestação e o recebimento.","nenhuma das alternativas, pois receitas a prazo só são contabilizadas no encerramento do exercício subsequente."],g:"A"},
+{q:"Na estrutura da Demonstração do Resultado do Exercício (DRE), as deduções e abatimentos de vendas são subtraídos diretamente de qual indicador para que se possa obter a Receita Líquida de Vendas?",a:["Lucro Bruto.","Receita Bruta de Vendas e Serviços.","Lucro Operacional Antes dos Juros.","Custo das Mercadorias Vendidas (CMV).","Resultado Financeiro."],g:"B"},
+{q:"As contas retificadoras (ou redutoras) do Ativo possuem uma particularidade quanto à sua natureza de saldo. Assinale a alternativa que indica uma conta retificadora do Ativo e a sua respectiva natureza de saldo:",a:["Depreciação Acumulada, de natureza devedora.","Duplicatas a Receber, de natureza credora.","Perdas Estimadas com Créditos de Liquidação Duvidosa (PECLD), de natureza credora.","Adiantamento a Fornecedores, de natureza credora.","Capital Social a Integralizar, de natureza devedora."],g:"C"},
+{q:"O método das partidas dobradas é a base do sistema contábil moderno. De acordo com os seus preceitos fundamentais, é correto afirmar que:",a:["para cada débito lançado em uma ou mais contas, deve haver um crédito de igual valor em uma ou mais contas.","o total dos débitos deve ser sempre o dobro do total dos créditos.","as contas de resultado aceitam apenas lançamentos a débito.","um lançamento a débito sempre indica uma situação desfavorável para a empresa.","os saldos das contas do ativo devem obrigatoriamente ser iguais aos saldos das contas de receitas."],g:"A"},
+{q:"Assinale a alternativa que apresenta apenas contas que possuem, por sua própria natureza operacional, um saldo credor:",a:["Caixa, Estoques e Fornecedores.","Capital Social, Receita de Vendas e Salários a Pagar.","Despesas de Aluguel, Veículos e Clientes.","Adiantamento a Empregados, Lucros Acumulados e Marcas.","Impostos a Recuperar, Empréstimos Bancários e Despesas Financeiras."],g:"B"},
+{q:"A diferenciação entre o Ativo Circulante e o Ativo Não Circulante baseia-se fundamentalmente no prazo de realização dos bens e direitos. De modo geral, consideram-se integrantes do Ativo Circulante os elementos que se realizarão:",a:["em até 90 dias após a data do fechamento do balanço.","no decorrer do exercício social subsequente ou de acordo com o ciclo operacional da empresa.","exclusivamente por meio de recebimento em moeda corrente à vista.","no prazo mínimo de dois anos a contar da data de aquisição.","somente quando a empresa decidir encerrar suas atividades operacionais."],g:"B"},
+{q:"Quando os gastos pré-operacionais ou despesas administrativas de uma organização ocorrem e não trazem benefícios econômicos futuros para a entidade, de acordo com as normas contábeis vigentes, eles devem ser reconhecidos imediatamente como:",a:["Ativo Diferido no Balanço Patrimonial.","Custos de Produção no Ativo Circulante.","Despesas no Resultado do período em que são incorridos.","Redução direta do Capital Social no Patrimônio Líquido.","Ajustes de Avaliação Patrimonial."],g:"C"},
+{q:"Se uma sociedade empresária efetua o pagamento de uma obrigação anteriormente registrada na conta Fornecedores utilizando recursos de sua conta corrente bancária, observa-se o seguinte efeito nas equações patrimoniais:",a:["Aumento do Ativo e aumento do Passivo.","Diminuição do Ativo e diminuição do Passivo.","Diminuição do Ativo e aumento do Patrimônio Líquido.","Aumento do Passivo e diminuição do Patrimônio Líquido.","Nenhuma alteração no total do Ativo ou do Passivo."],g:"B"},
+{q:"No encerramento do exercício financeiro, as contas de resultado (receitas e despesas) são zeradas para a apuração do resultado líquido. O lançamento de transferência do saldo das despesas para a conta de Apuração do Resultado do Exercício (ARE) exige:",a:["um débito nas respectivas contas de despesa e um crédito na conta ARE.","um crédito nas respectivas contas de despesa e um débito na conta ARE.","um débito na conta de Caixa e um crédito nas despesas.","um crédito no Patrimônio Líquido e um débito no Ativo.","a eliminação direta das contas sem necessidade de contrapartida."],g:"B"},
+{q:"O conceito contábil de Passivo a Descoberto ocorre em uma entidade quando:",a:["o total do Ativo é exatamente igual ao total do Passivo Exigível.","o Patrimônio Líquido apresenta saldo positivo superior ao capital social.","as obrigações com terceiros (Passivo Exigível) superam o total de bens e direitos (Ativo).","as despesas financeiras superam as receitas financeiras do período.","o Ativo Circulante é menor que o Passivo Circulante."],g:"C"},
+{q:"As contas que representam as aplicações de recursos de uma entidade e as que representam as origens de recursos de terceiros e próprios são evidenciadas, respectivamente, no Balanço Patrimonial como:",a:["Passivo e Ativo.","Receitas e Despesas.","Ativo e (Passivo + Patrimônio Líquido).","Patrimônio Líquido e Ativo.","Ativo Circulante e Ativo Não Circulante."],g:"C"},
+{q:"Sob a ótica da Teoria Patrimonialista das contas, as contas contábeis são divididas em dois grandes grupos básicos. São eles:",a:["Contas Integrais e Contas Diferenciais.","Contas do Proprietário e Contas dos Correspondentes.","Contas Patrimoniais e Contas de Resultado.","Contas Ativas e Contas Passivas.","Contas Nominais e Contas Reais."],g:"C"},
+{q:"O livro contábil obrigatório e indispensável, que registra os fatos contábeis em ordem cronológica dia a dia, contendo os lançamentos de débito e crédito de todas as operações da empresa, denomina-se:",a:["Livro Razão.","Livro Diário.","Balancete de Verificação.","Livro Caixa.","Livro de Inventário."],g:"B"},
+{q:"Um fato contábil que envolve, de forma simultânea, uma alteração qualitativa nos elementos patrimoniais do Ativo ou Passivo e uma alteração quantitativa que modifica o valor do Patrimônio Líquido para menos é classificado como:",a:["fato permutativo.","fato modificativo aumentativo.","fato modificativo diminutivo.","fato misto diminutivo.","fato misto aumentativo."],g:"D"},
+{q:"Determinada empresa contratou e pagou à vista, em 01 de outubro, um prêmio de seguro para cobertura de suas instalações industriais válido por 12 meses, com vigência iniciada na mesma data. No momento do pagamento, de acordo com o regime de competência, o valor total pago deve ser registrado como:",a:["Despesa de Seguros diretamente no resultado do período.","Despesas Antecipadas (Ativo Circulante/Não Circulante), a ser apropriado mensalmente.","Passivo Circulante, como uma obrigação com a seguradora.","Redução do Capital Social no Patrimônio Líquido.","Receita Diferida no Passivo Não Circulante."],g:"B"},
+{q:"O Balancete de Verificação é um demonstrativo auxiliar utilizado para verificar se o mecanismo das partidas dobradas foi respeitado nos registros contábeis. A igualdade obrigatória que o Balancete deve demonstrar é entre:",a:["o total do Ativo Circulante e o total do Passivo Circulante.","a soma dos saldos devedores e a soma dos saldos credores.","a soma das receitas e a soma das despesas.","o saldo do Caixa e o saldo do Capital Social.","o lucro bruto e o lucro líquido do período."],g:"B"},
+{q:"Na Demonstração do Resultado do Exercício (DRE), o indicador que reflete o resultado das vendas deduzido estritamente dos custos diretamente associados à produção ou aquisição das mercadorias vendidas, sem computar as despesas operacionais administrativas ou comerciais, é o:",a:["Lucro Líquido do Exercício.","Lucro Operacional (EBIT).","Lucro Bruto.","Resultado Financeiro.","Resultado Antes dos Tributos (LAIR)."],g:"C"},
+{q:"Qual das seguintes alternativas descreve uma conta de natureza devedora pertencente ao Balanço Patrimonial?",a:["Fornecedores.","Capital Social.","Adiantamento de Clientes (Receita Antecipada).","Estoques de Mercadorias.","Lucros Acumulados."],g:"D"},
+{q:"A receita bruta de vendas difere da receita líquida de vendas. Assinale o item que representa um elemento que não deduz a receita bruta na apuração da receita líquida na DRE:",a:["Descontos Comerciais (Incondicionais) concedidos no ato da venda.","Devoluções de vendas e cancelamentos.","Impostos incidentes sobre vendas (como ICMS e ISS).","Custo das Mercadorias Vendidas (CMV).","Abatimentos sobre vendas concedidos por defeitos na mercadoria."],g:"D"},
+{q:"Uma empresa comercial vendeu mercadorias a prazo para um cliente em novembro de 2025. O cliente efetuou o pagamento em dinheiro em janeiro de 2026. Se a empresa adotasse o Regime de Caixa para a apuração de seus relatórios contábeis, o ganho dessa venda seria computado como receita no mês de:",a:["novembro de 2025.","dezembro de 2025.","janeiro de 2026.","parcelado igualmente entre novembro de 2025 e janeiro de 2026.","nenhuma das opções, pois o regime de caixa não reconhece vendas a prazo."],g:"C"},
+{q:"Os estoques de uma empresa comercializadora são ativos mantidos para venda no curso normal dos negócios. Quando uma empresa realiza a contagem física de seus estoques apenas no final de um período para determinar o custo das mercadorias vendidas por diferença, ela utiliza o sistema de inventário:",a:["Permanente.","Periódico.","Identificação específica.","Média ponderada móvel.","Just-in-time."],g:"B"},
+{q:"As contas de despesa têm como função registrar as reduções nos benefícios econômicos durante o período contábil. Por essa razão, as contas de despesa possuem saldo de natureza:",a:["credora, e aumentam por lançamentos a crédito.","devedora, e aumentam por lançamentos a débito.","mista, dependendo se foram pagas à vista ou a prazo.","credora, mas aumentam por lançamentos a débito.","devedora, mas aumentam por lançamentos a crédito."],g:"B"},
+{q:"No estudo da Contabilidade Básica, os fatos contábeis que envolvem trocas entre elementos ativos e passivos, modificando a qualidade ou a organização do patrimônio, mas sem alterar o valor do Patrimônio Líquido, são classificados como:",a:["Fatos Modificativos.","Fatos Misto Aumentativos.","Fatos Permutativos.","Fatos Misto Diminutivos.","Fatos Extraordinários."],g:"C"},
+{q:"O direito de receber valores decorrentes de vendas a prazo efetuadas a clientes habituais da empresa deve ser registrado em uma conta do Ativo Circulante intitulada:",a:["Adiantamento a Fornecedores.","Duplicatas a Receber (ou Clientes).","Empréstimos Concedidos.","Receitas a Apropriar.","Fornecedores."],g:"B"},
+{q:"Se o Ativo de uma empresa é de R$ 500.000 e o seu Patrimônio Líquido é de R$ 200.000, com base na equação fundamental do patrimônio, o valor total de suas obrigações com terceiros corresponde a:",a:["R$ 700.000.","R$ 300.000.","R$ 200.000.","R$ 500.000.","R$ 100.000."],g:"B"},
+{q:"Uma conta classificada no Ativo representa:",a:["obrigação da entidade.","origem de recursos de terceiros.","aplicação de recursos controlados pela entidade.","aumento do patrimônio líquido.","receita realizada."],g:"C"},
+{q:"Assinale a alternativa que contém apenas contas do Passivo.",a:["Caixa, Fornecedores e Estoques.","Fornecedores, Salários a Pagar e Empréstimos Bancários.","Clientes, Fornecedores e Capital Social.","Estoques, Caixa e Veículos.","Capital Social, Lucros Acumulados e Caixa."],g:"B"},
+{q:"O Patrimônio Líquido corresponde:",a:["ao conjunto de bens da entidade.","ao total de direitos da entidade.","à diferença entre Ativo e Passivo Exigível.","ao total das receitas acumuladas.","ao total dos lucros distribuídos."],g:"C"},
+{q:"Uma conta de Receita possui natureza:",a:["devedora.","credora.","mista.","patrimonial devedora.","retificadora."],g:"B"},
+{q:"Quando uma empresa recebe de um cliente uma duplicata anteriormente registrada, ocorre:",a:["aumento do ativo e aumento do PL.","diminuição do ativo e diminuição do passivo.","permuta entre contas do ativo.","aumento do passivo.","redução do patrimônio líquido."],g:"C"},
+{q:"A compra de mercadorias a prazo representa:",a:["aumento do ativo e aumento do passivo.","diminuição do ativo e aumento do passivo.","aumento do ativo e aumento do patrimônio líquido.","diminuição do patrimônio líquido.","fato modificativo aumentativo."],g:"A"},
+{q:"O regime de competência determina que:",a:["receitas e despesas sejam registradas quando recebidas ou pagas.","apenas despesas sejam reconhecidas quando pagas.","receitas e despesas sejam reconhecidas quando ocorrerem seus fatos geradores.","somente receitas sejam registradas quando recebidas.","os registros ocorram apenas no encerramento do exercício."],g:"C"},
+{q:"Assinale a alternativa que apresenta uma conta de resultado.",a:["Caixa.","Clientes.","Fornecedores.","Receita de Serviços.","Capital Social."],g:"D"},
+{q:"O lançamento contábil de uma despesa paga à vista provoca:",a:["redução do ativo e redução do patrimônio líquido.","aumento do ativo e redução do passivo.","aumento do patrimônio líquido.","redução do passivo apenas.","aumento do ativo apenas."],g:"A"},
+{q:"A conta Capital Social é classificada no:",a:["Ativo Circulante.","Passivo Circulante.","Patrimônio Líquido.","Resultado.","Ativo Não Circulante."],g:"C"},
+{q:"São exemplos de bens:",a:["clientes e fornecedores.","caixa e veículos.","salários a pagar e caixa.","capital social e estoques.","empréstimos e terrenos."],g:"B"},
+{q:"Uma obrigação assumida pela entidade deve ser registrada no:",a:["Ativo.","Resultado.","Patrimônio Líquido.","Passivo.","Ativo Realizável."],g:"D"},
+{q:"As contas de despesa:",a:["possuem saldo credor.","aumentam por crédito.","possuem saldo devedor.","pertencem ao passivo.","pertencem ao patrimônio líquido."],g:"C"},
+{q:"O Balanço Patrimonial evidencia:",a:["apenas receitas e despesas.","a situação patrimonial da entidade em determinada data.","o fluxo de caixa.","exclusivamente os bens.","apenas o patrimônio líquido."],g:"B"},
+{q:"A venda de mercadorias à vista gera:",a:["aumento do ativo e aumento do patrimônio líquido.","redução do ativo e aumento do passivo.","redução do patrimônio líquido.","apenas permuta patrimonial.","aumento do passivo."],g:"A"},
+{q:"A conta Clientes representa:",a:["obrigação.","patrimônio líquido.","direito.","despesa.","receita."],g:"C"},
+{q:"Uma conta retificadora do ativo possui normalmente saldo:",a:["devedor.","credor.","misto.","nulo.","patrimonial devedor."],g:"B"},
+{q:"O pagamento de salários referentes ao mês corrente representa:",a:["fato modificativo aumentativo.","fato permutativo.","fato modificativo diminutivo.","fato misto aumentativo.","fato misto diminutivo."],g:"C"},
+{q:"O Livro Razão tem como principal finalidade:",a:["registrar fatos em ordem cronológica.","controlar individualmente os movimentos de cada conta.","substituir o Livro Diário.","registrar inventários.","registrar apenas entradas de caixa."],g:"B"},
+{q:"O total dos créditos em uma escrituração pelo método das partidas dobradas deve:",a:["ser maior que os débitos.","ser menor que os débitos.","ser igual ao total dos débitos.","ser o dobro dos débitos.","variar conforme o resultado."],g:"C"},
+{q:"O Ativo Circulante compreende:",a:["obrigações de curto prazo.","direitos realizáveis normalmente até o exercício seguinte.","patrimônio líquido.","receitas futuras.","apenas disponibilidades."],g:"B"},
+{q:"Uma empresa recebeu antecipadamente por um serviço que prestará futuramente. O valor recebido deve ser registrado inicialmente como:",a:["receita.","despesa.","ativo.","passivo.","patrimônio líquido."],g:"D"},
+{q:"A Demonstração do Resultado do Exercício tem como objetivo principal:",a:["demonstrar a composição do patrimônio.","apurar o resultado do período.","demonstrar apenas receitas.","demonstrar apenas despesas.","demonstrar o fluxo financeiro."],g:"B"},
+{q:"A conta Fornecedores possui natureza:",a:["devedora.","credora.","mista.","retificadora.","transitória."],g:"B"},
+{q:"Uma empresa com Ativo de R$ 800.000 e Passivo Exigível de R$ 500.000 possui Patrimônio Líquido de:",a:["R$ 1.300.000.","R$ 500.000.","R$ 300.000.","R$ 800.000.","R$ 200.000."],g:"C"},
+{q:"A aquisição de um veículo financiado provoca:",a:["aumento do ativo e aumento do passivo.","redução do ativo.","aumento do patrimônio líquido.","redução do passivo.","redução do patrimônio líquido."],g:"A"},
+{q:"Uma despesa antecipada é classificada inicialmente como:",a:["passivo.","patrimônio líquido.","ativo.","receita.","resultado credor."],g:"C"},
+{q:"O princípio da Entidade estabelece que:",a:["o patrimônio da empresa se confunde com o dos sócios.","receitas sempre coincidem com recebimentos.","o patrimônio da entidade é distinto do patrimônio de seus proprietários.","despesas devem ser reconhecidas pelo caixa.","ativos devem ser avaliados pelo mercado."],g:"C"},
+{q:"Uma conta de receita aumenta por:",a:["débito.","crédito.","estorno.","compensação.","transferência."],g:"B"},
+{q:"Se o Passivo Exigível de uma entidade for superior ao Ativo Total, a situação patrimonial será de:",a:["patrimônio líquido positivo.","lucro acumulado.","ativo realizável.","passivo a descoberto.","equilíbrio patrimonial positivo."],g:"D"}
+];
+
+let studentName = "";
+let current = 0;
+let answers = Array(questions.length).fill("");
+let startTime = null;
+let timerInterval = null;
+let whatsOpened = false;
+
+const letters = ["A","B","C","D","E"];
+
+document.getElementById("startWhats").addEventListener("click", function(e){
+  const name = document.getElementById("studentName").value.trim();
+  if(name.length < 3){
+    e.preventDefault();
+    showMsg("loginMsg","Digite seu nome completo antes de enviar para o WhatsApp.","err");
+    return;
+  }
+  studentName = name;
+  const msg = `Professor Moreira, meu nome é ${studentName}. Solicito a senha para iniciar o Simulado FGV de Contabilidade Básica.`;
+  this.href = `https://wa.me/${PROFESSOR_WHATSAPP}?text=${encodeURIComponent(msg)}`;
+  whatsOpened = true;
+  document.getElementById("passwordArea").classList.remove("hidden");
+  showMsg("loginMsg","WhatsApp aberto. Após receber a senha, digite para iniciar.","ok");
+});
+
+function showMsg(id,text,type){
+  const el = document.getElementById(id);
+  el.textContent = text;
+  el.className = "msg " + type;
+}
+
+function startQuiz(){
+  const name = document.getElementById("studentName").value.trim();
+  const pass = document.getElementById("password").value.trim();
+  if(name.length < 3){
+    showMsg("loginMsg","Nome obrigatório.","err"); return;
+  }
+  if(!whatsOpened){
+    showMsg("loginMsg","Primeiro envie seu nome para o WhatsApp do professor.","err"); return;
+  }
+  if(pass !== SENHA_SIMULADO){
+    showMsg("loginMsg","Senha incorreta. Digite a senha enviada pelo professor.","err"); return;
+  }
+  studentName = name;
+  startTime = Date.now();
+  timerInterval = setInterval(updateTimer,1000);
+  showScreen("quiz");
+  document.getElementById("nav").classList.add("active");
+  renderQuestion();
+}
+
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+function updateTimer(){
+  const s = Math.floor((Date.now()-startTime)/1000);
+  document.getElementById("timer").textContent = formatTime(s);
+}
+
+function formatTime(total){
+  const h = Math.floor(total/3600);
+  const m = Math.floor((total%3600)/60);
+  const s = total%60;
+  if(h>0) return `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+  return `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+}
+
+function renderQuestion(){
+  const item = questions[current];
+  document.getElementById("qCounter").textContent = `Questão ${current+1}/${questions.length}`;
+  document.getElementById("progressBar").style.width = `${((current+1)/questions.length)*100}%`;
+  document.getElementById("qBank").textContent = `${current+1}) (FGV - Contabilidade Básica)`;
+  document.getElementById("qText").textContent = item.q;
+
+  const box = document.getElementById("options");
+  box.innerHTML = "";
+  item.a.forEach((txt,idx)=>{
+    const div = document.createElement("div");
+    div.className = "option" + (answers[current]===letters[idx] ? " selected" : "");
+    div.textContent = `${letters[idx]}) ${txt}`;
+    div.onclick = ()=>{
+      answers[current] = letters[idx];
+      localStorage.setItem("simulado_moreira_respostas", JSON.stringify(answers));
+      renderQuestion();
+    };
+    box.appendChild(div);
+  });
+  renderGrid();
+}
+
+function renderGrid(){
+  const grid = document.getElementById("qGrid");
+  grid.innerHTML = "";
+  questions.forEach((_,i)=>{
+    const b = document.createElement("button");
+    b.textContent = i+1;
+    if(answers[i]) b.classList.add("done");
+    if(i===current) b.classList.add("current");
+    b.onclick = ()=>{ current=i; renderQuestion(); window.scrollTo({top:0,behavior:"smooth"}); };
+    grid.appendChild(b);
+  });
+}
+
+function nextQuestion(){
+  if(current < questions.length-1){
+    current++;
+    renderQuestion();
+    window.scrollTo({top:0,behavior:"smooth"});
+  }else{
+    finishQuiz();
+  }
+}
+
+function prevQuestion(){
+  if(current > 0){
+    current--;
+    renderQuestion();
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+}
+
+function finishQuiz(){
+  clearInterval(timerInterval);
+  const elapsedSeconds = Math.floor((Date.now()-startTime)/1000);
+  const score = questions.reduce((acc,q,i)=> acc + (answers[i]===q.g ? 1 : 0), 0);
+  const blank = answers.filter(x=>!x).length;
+
+  const ranking = saveLocalRanking(studentName, score, elapsedSeconds);
+  const rankText = ranking.position ? `${ranking.position}º lugar no ranking local deste aparelho` : "Ranking local indisponível";
+
+  let lines = [];
+  lines.push("RELATÓRIO FINAL - SIMULADO FGV CONTABILIDADE BÁSICA");
+  lines.push("Curso de Contabilidade Professor Moreira");
+  lines.push("");
+  lines.push(`Aluno: ${studentName}`);
+  lines.push(`Data/Hora: ${new Date().toLocaleString("pt-BR")}`);
+  lines.push(`Tempo gasto: ${formatTime(elapsedSeconds)}`);
+  lines.push(`Quantidade de questões: ${questions.length}`);
+  lines.push(`Quantidade de acertos: ${score}`);
+  lines.push(`Questões em branco: ${blank}`);
+  lines.push(`Ranking: ${rankText}`);
+  lines.push("");
+  lines.push("RESPOSTAS DO ALUNO:");
+  questions.forEach((q,i)=>{
+    lines.push(`${i+1}) ${answers[i] || "EM BRANCO"} | Gabarito interno: ${q.g}`);
+  });
+
+  const finalMsg = lines.join("\n");
+  document.getElementById("finalWhats").href = `https://wa.me/${PROFESSOR_WHATSAPP}?text=${encodeURIComponent(finalMsg)}`;
+
+  document.getElementById("nav").classList.remove("active");
+  showScreen("final");
+}
+
+function saveLocalRanking(name, score, seconds){
+  try{
+    const key = "ranking_moreira_simulado_fgv_contabilidade";
+    const list = JSON.parse(localStorage.getItem(key) || "[]");
+    list.push({name,score,seconds,date:new Date().toISOString()});
+    list.sort((a,b)=> b.score - a.score || a.seconds - b.seconds);
+    localStorage.setItem(key, JSON.stringify(list.slice(0,50)));
+    const pos = list.findIndex(x=>x.name===name && x.score===score && x.seconds===seconds) + 1;
+    return {position:pos};
+  }catch(e){ return {position:null}; }
+}
+
+function restartAll(){
+  if(!confirm("Deseja reiniciar o simulado? As respostas deste aparelho serão apagadas.")) return;
+  answers = Array(questions.length).fill("");
+  current = 0;
+  startTime = null;
+  whatsOpened = false;
+  localStorage.removeItem("simulado_moreira_respostas");
+  document.getElementById("studentName").value = "";
+  document.getElementById("password").value = "";
+  document.getElementById("passwordArea").classList.add("hidden");
+  document.getElementById("loginMsg").className = "msg";
+  document.getElementById("nav").classList.remove("active");
+  showScreen("login");
+}
+</script>
+</body>
+</html>
