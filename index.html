@@ -258,13 +258,15 @@ button,.btn{
       <div class="logo">Professor Moreira</div>
       <div class="badge">Acesso controlado</div>
       <div class="notice">
-        Para iniciar, informe seu nome, envie a mensagem para o WhatsApp do professor e digite a senha recebida.
+        Para iniciar, informe seu nome, envie a mensagem para o WhatsApp do professor e digite a senha recebida. A senha aceita letras maiúsculas ou minúsculas.
       </div>
 
       <label for="studentName">Nome completo obrigatório</label>
       <input id="studentName" type="text" placeholder="Digite seu nome completo">
 
       <a id="startWhats" class="btn btn-whats" href="#" target="_blank" rel="noopener">1) Enviar nome para o WhatsApp</a>
+
+      <button class="btn-light" onclick="liberarSenhaManual()">Já enviei meu nome e recebi a senha</button>
 
       <div id="passwordArea" class="hidden">
         <label for="password">Senha enviada pelo professor</label>
@@ -410,6 +412,18 @@ document.getElementById("startWhats").addEventListener("click", function(e){
   showMsg("loginMsg","WhatsApp aberto. Após receber a senha, digite para iniciar.","ok");
 });
 
+
+function liberarSenhaManual(){
+  const name = document.getElementById("studentName").value.trim();
+  if(name.length < 3){
+    showMsg("loginMsg","Digite seu nome completo antes de inserir a senha.","err");
+    return;
+  }
+  whatsOpened = true;
+  document.getElementById("passwordArea").classList.remove("hidden");
+  showMsg("loginMsg","Digite a senha enviada pelo professor para iniciar.","ok");
+}
+
 function showMsg(id,text,type){
   const el = document.getElementById(id);
   el.textContent = text;
@@ -418,15 +432,13 @@ function showMsg(id,text,type){
 
 function startQuiz(){
   const name = document.getElementById("studentName").value.trim();
-  const pass = document.getElementById("password").value.trim();
+  const pass = document.getElementById("password").value.trim().toUpperCase().replace(/\s+/g,"");
+  const senhaCorreta = SENHA_SIMULADO.trim().toUpperCase().replace(/\s+/g,"");
   if(name.length < 3){
     showMsg("loginMsg","Nome obrigatório.","err"); return;
   }
-  if(!whatsOpened){
-    showMsg("loginMsg","Primeiro envie seu nome para o WhatsApp do professor.","err"); return;
-  }
-  if(pass !== SENHA_SIMULADO){
-    showMsg("loginMsg","Senha incorreta. Digite a senha enviada pelo professor.","err"); return;
+  if(pass !== senhaCorreta){
+    showMsg("loginMsg","Senha incorreta. Digite exatamente a senha enviada pelo professor.","err"); return;
   }
   studentName = name;
   startTime = Date.now();
